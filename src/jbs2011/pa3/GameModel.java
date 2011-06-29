@@ -37,7 +37,7 @@ public class GameModel  {
 	/**
 	 * length of a game in seconds
 	 */
-	public float gameLength=15; // seconds
+	public float gameLength=30; // seconds
 	/**
 	 * time remaining in the current game
 	 */
@@ -45,11 +45,11 @@ public class GameModel  {
 	/**
 	 * number of games won so far
 	 */
-	public int wins;
+	public int score;
 	/**
 	 * number of games lost so far
 	 */
-	public int losses;
+	public int lastscore;
 	
 	// time since the last call to doDraw
 	private long dt;
@@ -123,8 +123,8 @@ public class GameModel  {
 	 * @param w
 	 * @return a square
 	 */
-	public Square addSquare(float x, float y, float w){
-		Square s = new Square(x,y,w,false);
+	public Square addSquare(float x, float y, float w, float z){
+		Square s = new Square(x,y,w,z,false);
 		return addSquare(s);
 	}
 	
@@ -145,8 +145,8 @@ public class GameModel  {
 	 * @param w
 	 * @return a target
 	 */
-	public Square addTarget(float x, float y, float w) {
-		return addTarget(new Square(x,y,w,true));
+	public Square addTarget(float x, float y, float w, float z) {
+		return addTarget(new Square(x,y,w,z,true));
 	}
 
 	/**
@@ -237,7 +237,8 @@ public class GameModel  {
 		timeRemaining = gameLength - (now-startTime)/1000f;
 		if (timeRemaining<0){
 			levelOver=true; userLost=true;
-			losses += 1;
+			lastscore = score ;
+			score = 0;
 			return;
 		}
 			
@@ -252,9 +253,11 @@ public class GameModel  {
 		
 		// if all of the disks are static (i.e. frozen), the level is over and the user lost.
 		if (activeDisks.size()==0){
-			levelOver=true; userLost=true;
-			losses += 1;
-			return;
+			
+			addDisk(50f,50f,25f);
+			//levelOver=true; userLost=true;
+			//losses += 1;
+			//return;
 		}
 		
 		// if there are non-static disks, then we update their positions
@@ -286,15 +289,16 @@ public class GameModel  {
 					
 		}
 		for (Disk d:hitDisk){
-			//disks.remove(d);
+			disks.remove(d);
 		}
 		for (Square s:hitTarget)
-			targets.remove(s);
+			//targets.remove(s);
+			score++;
 		
 		if (targets.size()==0) {
 			levelOver=true;
 			userWon=true;
-			wins += 1;
+			//wins += 1;
 		}
 
 	}
@@ -328,8 +332,8 @@ public class GameModel  {
 		timeRemaining = gameLength;
 		switch (level){
 		case 1: // this is a simple level with 3 disks a square and a target, useful for debugging...
-			addSquare(150f, 50f, 50f);
-			addTarget(180f, 150f, 50f);
+			addSquare(150f, 50f, 50f,50f);
+			addTarget(180f, 150f, 50f,50f);
 			Disk d = addDisk(150f, 500f, 50f);
 			addDisk(300f, 500f, 30f);
 			addDisk(350f, 500f, 20f);
@@ -340,6 +344,27 @@ public class GameModel  {
 			
 		
 		case 2: // this is a fun level with up to 30 visible blocks, 10 targets and 1 disks..
+			
+			//middle
+			addTarget(600f, 350f, 50f,50f);
+			addSquare(600f, 250f, 200f,20f);
+			addSquare(500, 350f, 20f,200f);
+			addSquare(700f, 350f, 20f,200f);
+			
+			//left
+			addTarget(250f, 450f, 50f,50f);
+			addSquare(250f, 350f, 200f,20f);
+			addSquare(150, 450f, 20f,200f);
+			addSquare(350f, 450f, 20f,200f);
+			
+			//right
+			addTarget(950f, 450f, 50f,50f);
+			addSquare(950f, 350f, 200f,20f);
+			addSquare(850, 450f, 20f,200f);
+			addSquare(1050f, 450f, 20f,200f);
+			
+			
+			/*
 			for (int i=0;i<10; i++){
 				this.addSquare((float)Math.random()*width,(float)Math.random()*(height-100)+100,(float)Math.random()*30+40);
 			}
@@ -349,7 +374,8 @@ public class GameModel  {
 
 			for (int i=0;i<2;i++)
 				this.addDisk(50f*i,50f,25f);
-
+			*/
+			
 			break;
 	  }
 	}
@@ -361,8 +387,8 @@ public class GameModel  {
 		// TODO Auto-generated method stub
 		System.out.println("staring the test method\n");
 		GameModel g = new GameModel();
-		g.addSquare(0f,1f,2f);
-		g.addTarget(0f,3f,2f);
+		g.addSquare(0f,1f,2f,1f);
+		g.addTarget(0f,3f,2f,1f);
 		Disk d = g.addDisk(0f,10f,1f);
 		d.vx=1; d.vy=20;
 		g.toString();

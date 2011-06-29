@@ -117,7 +117,7 @@ public class Disk {
 	 */
 	public boolean intersects(Square s) {
 		return ((Math.abs(this.x - s.x) < this.r + (s.w) / 2) 
-				&& (Math.abs(this.y - s.y) < this.r + (s.w) / 2));
+				&& (Math.abs(this.y - s.y) < this.r + (s.z) / 2));
 	}
 
 	/**

@@ -5,7 +5,7 @@ public class Square {
 	 * the x and y position of the center of the square
 	 * and its width w
 	 */
-	public float x,y,w;
+	public float x,y,w,z;
 	
 	
 	/**
@@ -22,8 +22,8 @@ public class Square {
 	 * @param w
 	 * @param isTarget
 	 */
-	public Square(float x, float y, float w, boolean isTarget) {
-		this.x=x; this.y=y; this.w=w;
+	public Square(float x, float y, float w, float z, boolean isTarget) {
+		this.x=x; this.y=y; this.w=w; this.z=z;
 		this.isTarget = isTarget;
 	}
 	
@@ -34,7 +34,7 @@ public class Square {
 	 * @return true if point within square
 	 */
 	public boolean inside(float x, float y){
-		return (Math.abs(x-this.x)<this.w/2) && (Math.abs(y-this.y)<this.w/2);
+		return (Math.abs(x-this.x)<this.w/2) && (Math.abs(y-this.y)<this.z/2);
 	}
 	
 	/**
